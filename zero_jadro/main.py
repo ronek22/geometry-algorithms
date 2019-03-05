@@ -6,7 +6,7 @@ util = Utility()
 
 
 # Wczytywanie z pliku
-polytxt = util.from_txt('data2.txt')
+polytxt = util.from_txt('data4.txt')
 
 util.draw(*polytxt.get_axes())
 print("Istnieje jądro? ", polytxt.check_kernel())
