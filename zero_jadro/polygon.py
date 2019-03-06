@@ -54,7 +54,7 @@ class Polygon:
         if bottomSpikes:
             self.bottomSpike = max(bottomSpikes, key=attrgetter('y'))
         if topSpikes:
-            self.topSpike = min(topSpikes, key=attrgetter('x'))
+            self.topSpike = min(topSpikes, key=attrgetter('y'))
 
     def check_kernel(self):
         self.find_min_max()
