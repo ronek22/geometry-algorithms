@@ -11,7 +11,7 @@ for filename in exercises[::-1]:
     polytxt = util.from_txt('data/' + filename)
 
     util.draw(*polytxt.get_axes())
-    print filename,"\tIstnieje jadro? ", polytxt.check_kernel()
+    print(filename,"\tIstnieje jadro? ", polytxt.check_kernel())
     util.draw_spikes(polytxt)
 
 
