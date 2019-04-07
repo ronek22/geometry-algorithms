@@ -20,8 +20,10 @@ class _Utility:
     def draw_spikes(self, polygon):
         fig = plt.figure(self._fig_counter)
         ax = fig.get_axes()[0]
-        ax.plot(*polygon.topSpike.get_xy, "or", color='r')
-        ax.plot(*polygon.bottomSpike.get_xy, "or", color='g')
+        topx, topy = polygon.topSpike.get_xy
+        bottx, botty = polygon.bottomSpike.get_xy
+        ax.plot(topx, topy, "or", color='r')
+        ax.plot(bottx, botty, "or", color='g')
 
     def redraw(self, x, y, _color):
         fig = plt.figure(self._fig_counter)
