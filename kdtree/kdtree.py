@@ -1,4 +1,4 @@
-from node import Node
+from models.node import Node
 from functools import wraps
 from collections import deque
 
