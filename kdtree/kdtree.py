@@ -189,7 +189,7 @@ def visualize(tree, max_level=100, node_width=10, left_padding=5):
 
         width = int(max_width*node_width/per_level)
 
-        node_str = (str(node.data) if node else '').center(width)
+        node_str = (str(node.data) + str(node.get_axis) if node else '').center(width)
         print(node_str, end=' ')
 
         in_level += 1

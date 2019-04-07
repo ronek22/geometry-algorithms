@@ -3,39 +3,48 @@ import kd_algo
 from kdsearch import Point, buildTree
 from models.area import Area
 import json
+from matplotlib import pyplot as plt
+from matplotlib.patches import Rectangle
+
+
+def draw(x,y, area, tree):
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    rect = plt.Rectangle(area.bottomCorner, area.width, area.height, color='k', alpha=0.3)
+
+    ax.add_patch(rect)
+    ax.scatter(x,y)
+
+    for node in tree.inorder():
+        if node.get_axis == 'y':
+            plt.axhline(y=node.data[1], color='b', linestyle='-', linewidth=.2)
+        else:
+            plt.axvline(x=node.data[0], color='b', linestyle='-', linewidth=.2)
+
+
 
 if __name__ == "__main__":
     x = [4,2,1]
     y = [3,5,2]
 
-    # x = [1,2,3,5,4,7,8,7,6] 
-    # y = [2,5,9,1,3,9,6,4,7]
+    x = [1,2,3,5,4,7,8,7,6] 
+    y = [2,5,9,1,3,9,6,4,7]
 
     points = list(zip(x,y))
+    area = Area(Point(3,2), Point(5,4))
+
     print(points)
 
-    # tree = kdtree.create(points)
-    # kdtree.visualize(tree)
-    # print(kdtree.findSplitNode(tree, 6, 8))
     sorting_every = kd_algo.buildTree(points)
-    # best = create(points, 2)
 
-    area = Area(Point(3,2), Point(5,4))
-    rangeResult = kd_algo.rangeSearch(sorting_every, area)
     areaResult = kd_algo.searchArea(sorting_every, area)
 
-    print(rangeResult)
     print(areaResult)
 
     visualize(sorting_every)
-    # visualize(best)
+    draw(x, y, area, sorting_every)
 
-    # serialized_tree = json.dumps(kdtree, indent=4)
-    # serialized_second= json.dumps(second, indent=4)
-    
+    plt.show()
 
-    # print(serialized_tree)
-    # print(serialized_second)
-    # print(second)
 
     

@@ -17,4 +17,15 @@ class Area:
             return True
         else:
             return False
+    
+    @property
+    def bottomCorner(self):
+        return (self.pmin.x, self.pmin.y)
         
+    @property
+    def width(self):
+        return self.pmax.x - self.pmin.x
+
+    @property
+    def height(self):
+        return self.pmax.y - self.pmin.y

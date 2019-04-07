@@ -1,8 +1,13 @@
 class Node:
-    def __init__(self, data=None, left=None, right=None):
+    def __init__(self, data=None, left=None, right=None, axis=None):
         self.data = data
         self.left = left
         self.right = right
+        self.axis = axis
+
+    @property
+    def get_axis(self):
+        return 'x' if self.axis == 0 else 'y'
 
     @property
     def is_leaf(self):
