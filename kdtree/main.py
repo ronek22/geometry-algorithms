@@ -1,8 +1,6 @@
-from kdtree import visualize, create
 import kd_algo
-from kdsearch import Point, buildTree
 from models.area import Area
-import json
+from models.point import Point
 from matplotlib import pyplot as plt
 from matplotlib.patches import Rectangle
 
@@ -32,17 +30,13 @@ if __name__ == "__main__":
 
     points = list(zip(x,y))
     area = Area(Point(3,2), Point(5,4))
+    tree = kd_algo.buildTree(points)
 
-    print(points)
-
-    sorting_every = kd_algo.buildTree(points)
-
-    areaResult = kd_algo.searchArea(sorting_every, area)
-
+    areaResult = kd_algo.searchArea(tree, area)
     print(areaResult)
 
-    visualize(sorting_every)
-    draw(x, y, area, sorting_every)
+    kd_algo.visualize(tree)
+    draw(x, y, area, tree)
 
     plt.show()
 

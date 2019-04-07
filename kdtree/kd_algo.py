@@ -6,6 +6,7 @@ Then recurse down to the leaf nodes and check if the points in the leaves are in
 from models.node import Node
 from models.area import Area
 from models.point import Point
+from collections import deque
 k = 2
 
 
@@ -45,7 +46,6 @@ def searchArea(node: Node, area: Area):
     temp = []
 
     if node.is_leaf:
-        print("LISC:", node.data)
         if area.is_inside(node.data):
             result.append(node.data)
             print("RESULT: ", result)
@@ -57,6 +57,61 @@ def searchArea(node: Node, area: Area):
         result.extend(temp)
 
     return result
+
+
+def level_order(tree, include_all=False):
+    """ Returns an iterator over the tree in level-order
+    If include_all is set to True, empty parts of the tree are filled
+    with dummy entries and the iterator becomes infinite. """
+
+    q = deque()
+    q.append(tree)
+    while q:
+        node = q.popleft()
+        yield node
+
+        if include_all or node.left:
+            q.append(node.left or node.__class__())
+
+        if include_all or node.right:
+            q.append(node.right or node.__class__())
+
+
+
+def visualize(tree, max_level=100, node_width=10, left_padding=5):
+    """ Prints the tree to stdout """
+
+    height = min(max_level, tree.height()-1)
+    max_width = pow(2, height)
+
+    per_level = 1
+    in_level  = 0
+    level     = 0
+
+    for node in level_order(tree, include_all=True):
+
+        if in_level == 0:
+            print()
+            print()
+            print(' '*left_padding, end=' ')
+
+        width = int(max_width*node_width/per_level)
+
+        node_str = (str(node.data) + str(node.get_axis) if node else '').center(width)
+        print(node_str, end=' ')
+
+        in_level += 1
+
+        if in_level == per_level:
+            in_level   = 0
+            per_level *= 2
+            level     += 1
+
+        if level > height:
+            break
+
+    print()
+    print()
 
 """
 tuple function build_kd_tree(int depth, set points):
