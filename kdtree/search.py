@@ -34,10 +34,11 @@ def fullyContained(node: Area, area: Area):
 
 def intersects(node: Area, area: Area):
     if node and area:
+        # above or below
         if(area.topCorner[1] < node.bottomCorner[1] or
             area.bottomCorner[1] > node.topCorner[1]):
             return False
-
+        # right or left doesnt interesect with region
         if(area.topCorner[0] < node.bottomCorner[0] or
             area.bottomCorner[0] > node.topCorner[0]):
             return False

@@ -21,7 +21,8 @@ def closest_pair(ax, ay):
     if size <= 3:
         return brute(ax)
         
-    mid = size // 2
+    # dzielimy ax na dwie polowy
+    mid = size // 2 
     Lx = ax[:mid]
     Rx = ax[mid:]
 
@@ -36,26 +37,32 @@ def closest_pair(ax, ay):
         else:
             Ry.append(x)
 
-    (p1, q1, mi1) = closest_pair(Lx, Ly)
-    (p2, q2, mi2) = closest_pair(Rx, Ry)
+    (p_left, q_left, dist_left) = closest_pair(Lx, Ly)
+    (p_right, q_right, dist_right) = closest_pair(Rx, Ry)
 
-    if mi1 <= mi2:
-        d = mi1
-        mn = (p1,q1)
+    # rekurencja zakonczona porownanie, wynikow z lewej i prawej
+    if dist_left <= dist_right:
+        dist = dist_left
+        pair = (p_left,q_left)
     else:
-        d = mi2
-        mn = (p2,q2)
+        dist = dist_right
+        pair = (p_right,q_right)
 
-    (p3, q3, mi3) = closest_split_pair(ax, ay, d, mn)
+    # moze byc tak, ze jeden punkt znajduje sie po lewej stronie,
+    # a drugi po prawej, i ich dystans moze byc mniejszy niz aktulany
 
-    if d <= mi3:
-        return mn[0], mn[1], d
+    # sprawdz obszar w lewo i prawo od srodka 
+    # oddalony o minimalny dystans dotychczasz znaleziony
+    (p_split, q_split, dist_split) = closest_split_pair(ax, ay, dist, pair)
+
+    if dist <= dist_split:
+        return pair[0], pair[1], dist
     else:
-        return p3,q3,mi3
+        return p_split,q_split,dist_split
 
 def brute(ax):
     mi = dist(ax[0], ax[1])
-    p1, p2 = ax[0], ax[1]
+    best_pair = ax[0], ax[1]
     size = len(ax)
 
     if size == 2:
@@ -64,19 +71,22 @@ def brute(ax):
     for i in range(size-1):
         for j in range(i+1, size):
             if i != 0 or j != 1:
-                d = dist(ax[i], ax[j])
-                if d < mi:
-                    mi = d
-                    p1, p2 = ax[i], ax[j]
-    return p1,p2,mi
+                p, q = ax[i], ax[j]
+                dst = dist(p, q)
+                if dst < mi:
+                    mi = dst
+                    best_pair = ax[i], ax[j]
+    return best_pair[0], best_pair[1], mi
 
 def closest_split_pair(p_x, p_y, delta, best_pair):
     size_x = len(p_x)
-    mx_x = p_x[size_x // 2][0] 
+    mx_x = p_x[size_x // 2][0] # wspolrzednia x srodka
 
-    s_y = [x for x in p_y if mx_x - delta <= x[0] <= mx_x + delta]
-    best = delta
+    # wszystkie punkty, ktore mieszcza sie w pasie delta
+    s_y = [x for x in p_y if x[0] <= abs(mx_x - delta)] 
     size_y = len(s_y)
+
+    best = delta
 
     for i in range(size_y - 1):
         for j in range(i+1, min(i+7, size_y)):
@@ -100,7 +110,7 @@ if __name__ == "__main__":
     # x = [1,2,3,3,-3,-1,2,1,-5]
     # y = [2,-1,-3,2,4,2,3,1,-2]
 
-    points = generate_test_case(20, 20)
+    points = generate_test_case(6, 20)
 
     point1, point2, distance = solution(points)
     draw(points, point1, point2)
