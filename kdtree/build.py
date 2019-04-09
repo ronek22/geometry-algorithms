@@ -2,6 +2,13 @@ from node import Node
 from copy import deepcopy
 
 
+def createTree(points):
+    points_x = sorted(points, key=lambda x: x[0])
+    points_y = sorted(points, key=lambda x: x[1])
+    points = [points_x, points_y]
+
+    return buildTree(points)
+
 def getMedian(points, axis, n):
     half = n // 2
 
@@ -23,18 +30,21 @@ def split(points, median, axis, n):
 
 
 def buildTree(points, depth=0):
-    n = len(points)
+    n = len(points[0])
     axis = depth % 2
 
     if n == 1:
-        return Node(data=points[0], axis=depth)
+        return Node(data=points[axis][0], axis=depth)
     elif n == 0:
         return None
 
-    points = sorted(points, key=lambda x: x[axis])
-    median = getMedian(points, axis, n)
+    median = getMedian(points[axis], axis, n)
 
-    left, right = split(points, median, axis, n)
+    leftX, rightX = split(points[0], median, axis, n)
+    leftY, rightY = split(points[1], median, axis, n)
+
+    left = [leftX, leftY]
+    right = [rightX, rightY]
     # help_printer(depth, left, right, axis)
 
     vleft = buildTree(left, depth+1)
