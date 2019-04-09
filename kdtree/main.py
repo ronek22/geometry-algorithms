@@ -14,19 +14,15 @@ if __name__ == "__main__":
     points = list(zip(x,y))
 
     kdtree = buildTree(points)
-    area = Area([0,3], [5,10])
+    area = Area([5,6.5], [10,10])
     kdtree.region = Area([min(x),min(y)], [max(x),max(y)])
     kdtree.region = Area([0,0], [10,10])
     
     set_regions(kdtree)
     searchArea(kdtree, area)
 
-    # print("HEIGHT: ", kdtree.height())
-
-    print(kdtree.get_axis)
-
-    for node in kdtree.inorder():
-        print(node)
+    # for node in kdtree.inorder():
+    #     print(node)
     # visualize(kdtree)
 
     draw(x, y, area, kdtree)

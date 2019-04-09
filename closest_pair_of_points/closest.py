@@ -2,16 +2,16 @@ import math
 from matplotlib import pyplot as plt
 import random
 
-def draw(x, y, pt1, pt2):
+def draw(points, pt1, pt2):
+    x, y = [x[0] for x in points], [x[1] for x in points]
     fig = plt.figure(1, figsize=(5,5), dpi=90)
     plt.scatter(x,y)
     plt.plot(*pt1, "or", color="g")
     plt.plot(*pt2, "or", color="g")
 
-def solution(x, y):
-    a = list(zip(x,y))
-    ax = sorted(a, key=lambda x: x[0]) # lista punktow sortowana po x
-    ay = sorted(a, key=lambda x: (x[1],x[0])) # lista punktow sortowana po y
+def solution(points):
+    ax = sorted(points, key=lambda x: x[0]) # lista punktow sortowana po x
+    ay = sorted(points, key=lambda x: (x[1],x[0])) # lista punktow sortowana po y
     p1, p2, mi = closest_pair(ax, ay)
     return p1, p2, mi
 
@@ -91,9 +91,7 @@ def dist(p1, p2):
     return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1]) ** 2)
 
 def generate_test_case(length: int, _range: int):
-    x = [random.randint(0, _range) for i in range(length)]
-    y = [random.randint(0, _range) for i in range(length)]
-    return x,y
+    return list(set((random.randint(0, _range),random.randint(0, _range)) for i in range(length)))
 
 
 
@@ -102,10 +100,10 @@ if __name__ == "__main__":
     # x = [1,2,3,3,-3,-1,2,1,-5]
     # y = [2,-1,-3,2,4,2,3,1,-2]
 
-    x, y = generate_test_case(30, 20)
+    points = generate_test_case(20, 20)
 
-    point1, point2, distance = solution(x,y)
-    draw(x, y, point1, point2)
+    point1, point2, distance = solution(points)
+    draw(points, point1, point2)
 
     print(point1, point2, distance)
 
