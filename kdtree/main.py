@@ -1,44 +1,33 @@
-import kd_algo
-from models.area import Area
-from models.point import Point
-from matplotlib import pyplot as plt
-from matplotlib.patches import Rectangle
-
-
-def draw(x,y, area, tree):
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    rect = plt.Rectangle(area.bottomCorner, area.width, area.height, color='k', alpha=0.3)
-
-    ax.add_patch(rect)
-    ax.scatter(x,y)
-
-    for node in tree.inorder():
-        if node.get_axis == 'y':
-            plt.axhline(y=node.data[1], color='b', linestyle='-', linewidth=.2)
-        else:
-            plt.axvline(x=node.data[0], color='b', linestyle='-', linewidth=.2)
-
+from build import buildTree, set_regions
+from search import searchArea
+from area import Area
+from utility import draw, visualize
 
 
 if __name__ == "__main__":
-    x = [4,2,1]
-    y = [3,5,2]
+    x = [1,2,3,5,4,9,8,7,6] 
+    y = [2,5,9,1,3,8,6,4,7]
 
-    x = [1,2,3,5,4,7,8,7,6] 
-    y = [2,5,9,1,3,9,6,4,7]
+    # x = [4,2,1]
+    # y = [3,5,2]
 
     points = list(zip(x,y))
-    area = Area(Point(3,2), Point(5,4))
-    tree = kd_algo.buildTree(points)
 
-    areaResult = kd_algo.searchArea(tree, area)
-    print(areaResult)
-
-    kd_algo.visualize(tree)
-    draw(x, y, area, tree)
-
-    plt.show()
-
-
+    kdtree = buildTree(points)
+    area = Area([0,3], [5,10])
+    kdtree.region = Area([min(x),min(y)], [max(x),max(y)])
+    kdtree.region = Area([0,0], [10,10])
     
+    set_regions(kdtree)
+    searchArea(kdtree, area)
+
+    # print("HEIGHT: ", kdtree.height())
+
+    print(kdtree.get_axis)
+
+    for node in kdtree.inorder():
+        print(node)
+    # visualize(kdtree)
+
+    draw(x, y, area, kdtree)
+    print("KONIEC")
