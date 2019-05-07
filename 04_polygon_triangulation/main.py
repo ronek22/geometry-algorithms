@@ -11,7 +11,7 @@ if __name__ == "__main__":
     right = Triangulation(datafile='right.txt')
     right.plot()
 
-    circle = Triangulation(datafile='circle.txt')
-    circle.plot()
+    # circle = Triangulation(datafile='circle.txt')
+    # circle.plot()
     
     plt.show()

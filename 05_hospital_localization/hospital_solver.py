@@ -7,7 +7,6 @@ class HospitalSolver:
     def __init__(self, cities: list, hospitals_amount):
         if hospitals_amount > len(cities) or hospitals_amount < 1:
             raise AttributeError("There have to be less hospitals than cities or more than 1 hospital")
-        print(len(cities))
         self.cities = cities
         self.hospitals_amount = hospitals_amount
         self.hospitals = []
@@ -37,11 +36,22 @@ class HospitalSolver:
         print("Radius = ", self.optimized_distance)
 
     def draw(self):
+        mr = 5
+        xmax, ymax = max(point.x for point in self.all_cities), max(point.y for point in self.all_cities)
+        xmin, ymin = min(point.x for point in self.all_cities), min(point.y for point in self.all_cities)
         x, y = [x.x for x in self.all_cities], [x.y for x in self.all_cities]
-        fig = plt.figure()
-        plt.scatter(x, y)
+        fig = plt.figure(figsize=(5,5), dpi=120)
+        plt.axis('equal')
+        plt.scatter(x, y, s=15)
         for hospital in self.hospitals:
+            circle = plt.Circle((hospital.x, hospital.y), self.optimized_distance, color='r' ,fill=False, linestyle='--', linewidth=.5)
+            plt.gcf().gca().add_artist(circle)
             plt.plot(*hospital.get_xy, "or", color="r")
+
+        axes = plt.gca()
+        axes.set_xlim([xmin-mr,xmax+mr])
+        axes.set_ylim([ymin-mr,ymax+mr])
+
 
     def calculate_new_hospital_with_optimized_distance(self, k):
         self.calculate_new_hospitals(k)
