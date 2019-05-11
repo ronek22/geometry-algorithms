@@ -6,6 +6,10 @@ class Point:
         self.y = y
         self.orientation = orientation
 
+    @property
+    def color(self):
+        return 'g' if self.orientation==1 else 'b'
+
 
     def angle_three_points(self, p2, p3):
         rads = atan2(p2.y - self.y, p2.x - self.x) - atan2(p3.y - self.y, p3.x - self.x)

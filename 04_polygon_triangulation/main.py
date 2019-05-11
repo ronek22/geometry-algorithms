@@ -1,17 +1,15 @@
 from triangulation import Triangulation
 import matplotlib.pyplot as plt
+import argparse
 
 if __name__ == "__main__":
-    # monotonic = Triangulation(datafile='monotonic.txt')
-    # monotonic.plot()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--file', type=str, default='right.txt', 
+        help='Give name of the file contains vertex\'s polygon data')
+    args = parser.parse_args()
+    filename = args.file
 
-    # not_monotonic = Triangulation(datafile='not_monotonic.txt')
-    # not_monotonic.plot()
+    polygon = Triangulation(datafile=filename)
+    polygon.triangulate()
 
-    right = Triangulation(datafile='right.txt')
-    right.plot()
-
-    # circle = Triangulation(datafile='circle.txt')
-    # circle.plot()
-    
-    plt.show()
+    input("Press any key to end")

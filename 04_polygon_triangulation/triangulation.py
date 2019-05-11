@@ -18,49 +18,52 @@ class Triangulation:
         return p1.orientation == p2.orientation
 
     def triangulate(self):
+        self.plot_polygon()
         edges = []
         stack = [self.vertices[0], self.vertices[1]]
         
         for i, vi in enumerate(self.vertices[2:-1]):
-            print("STACK: ", stack)
-            print("FIRST ON STACK", stack[-1], " VERTEX: ", vi)
+            print("\tSTACK: ", stack)
+            print("\tFIRST ON STACK", stack[-1], " VERTEX: ", vi)
             # vi oraz wiercholek stosu sa na roznych lancuchach
             if not Triangulation.same_chain(vi, stack[-1]):
                 print("DIFFERNT CHAINS")
                 vk = stack[-1]
-                while len(stack) != 0:
-                    edges.append(Edge(vi, stack.pop(), color='y'))
+                while len(stack) != 1:
+                    edge = Edge(vi, stack.pop(), color='y')
+                    edges.append(edge)
+                    self.plot_diagonal(edge)
+                stack.pop()
 
                 stack.append(vk)
                 stack.append(vi)
             else:
                 print("ON THE SAME CHAIN: ")
+                last_popped = None
                 vk = stack.pop()
-                while len(stack) != 0:
-                    vj = stack.pop()
-                    print(vj, vk, vi)
-                    if vj.turn_right(vk, vi):
-                        edges.append(Edge(vi, vj, color='b'))
-                    else:
-                        break
+                while len(stack) != 0 and stack[-1].turn_right(vk, vi):
+                    last_popped = stack.pop()
+                    edge = Edge(vi, last_popped, color='b')
+                    edges.append(edge)
+                    self.plot_diagonal(edge)
                 
-                stack.append(vj)
+                last_popped = vk if last_popped is None else last_popped
+                stack.append(last_popped)
                 stack.append(vi)
         
+        print("STACK: ", stack)
         vn = self.vertices[-1]
         for i, item in enumerate(stack):
-            if i not in [0, len(stack)]:
+            if i not in [0, len(stack)-1]:
+                edge = Edge(vn, item, color='g')
                 edges.append(Edge(vn, item, color='g'))
+                self.plot_diagonal(edge)
         return edges
 
-    def plot(self):
-        '''
-        plots graph of triangulation
-        '''
-
-        lines = self.triangulate()
-
+    def plot_polygon(self):
+        plt.ion()
         x_s, y_s = [point.x for point in self.unsorted_vertices], [point.y for point in self.unsorted_vertices]
+        
         additional = 0
         while self.unsorted_vertices[0].x != x_s[-1]:
             point = self.unsorted_vertices[additional]
@@ -69,10 +72,17 @@ class Triangulation:
             additional += 1
 
         fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.plot(x_s, y_s, marker='o', linestyle='-', color='r', label='Points')
+        self.ax = fig.add_subplot(111)
+        self.ax.plot(x_s, y_s, marker='o', linestyle='-', color='r', label='Points')
 
-        for line in lines:
-            ax.plot([line.p1.x, line.p2.x], [line.p1.y, line.p2.y], linestyle='-', color=line.color)
+        for point in self.unsorted_vertices:
+            self.ax.plot(point.x, point.y, "or", color=point.color)
+            self.ax.text(point.x, point.y, f"({point.x}, {point.y})")
 
-        # plt.show()
+
+
+    def plot_diagonal(self, line):
+        self.ax.plot([line.p1.x, line.p2.x], [line.p1.y, line.p2.y], linestyle='-', color=line.color)
+        plt.pause(0.1)
+        plt.draw()
+

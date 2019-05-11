@@ -14,8 +14,13 @@ class Polygon:
         orientation = 1
         for i, vertex in enumerate(vertices):
             try:
+
                 orientation = 1 if vertices[i+1].x > vertex.x else -1
                 vertex.orientation = orientation
+                if vertices[i-1].x < vertex.x and vertices[i+1].x < vertex.x:
+                    vertex.orientation = 1
+                # if vertex.x == 100 and vertex.y ==200:
+                #     vertex.orientation=-1
                 self.vertices[i+1].orientation = orientation
                 self.edges.append(Edge(vertex, self.vertices[i+1]))
             except IndexError:
