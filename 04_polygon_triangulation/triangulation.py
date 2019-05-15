@@ -11,7 +11,23 @@ class Triangulation:
         vertices = Utility().from_txt(datafile)
         self.polygon = Polygon(vertices)
         self.unsorted_vertices = vertices
-        self.vertices = sorted(vertices, key=lambda v: v.x)
+        self.vertices = self.reorder(vertices)
+
+    def reorder(self, vertices):
+        sort_by_x, size = [], len(vertices)
+        min_ix = vertices.index(min(vertices, key=lambda v: v.x))
+        sort_by_x.append(vertices[min_ix])
+        cw, ccw = (min_ix-1)%size, (min_ix+1)%size
+
+        while len(sort_by_x) != size:
+            if vertices[cw].x < vertices[ccw].x:
+                sort_by_x.append(vertices[cw])
+                cw = (cw-1)%size
+            else:
+                sort_by_x.append(vertices[ccw])
+                ccw = (ccw+1)%size
+
+        return sort_by_x
     
     @classmethod
     def same_chain(cls, p1: Point, p2: Point):
