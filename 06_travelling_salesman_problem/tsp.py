@@ -51,7 +51,7 @@ class TSP:
             for subset in subsets:
                 for next_node in range(N):
                     if next_node != start and self.inSet(next_node, subset):
-                        subset_without_next, minDist = subset ^ (1 << next_node), inf
+                        subset_without_next, minDist = subset ^ (1 << next_node), inf # remove next from subset using xor
                         for end_node in range(N):
                             if end_node != start and end_node != next_node and self.inSet(end_node, subset): 
                                 newDist = memo[end_node][subset_without_next] + self.distances[end_node][next_node]
@@ -90,6 +90,8 @@ class TSP:
         return (1 << elem) & subset == 0
 
     def inSet(self, elem, subset):
+        """(1 << elem) bit wskazujacy na wezel np. 01000 & koniunkcja z podzbiorem
+        jesli ten wezej jest w tym zbiorze to wynik bedzie rozny od 0"""
         return (1 << elem) & subset != 0
 
     def combinations(self, r, n, debug=False):

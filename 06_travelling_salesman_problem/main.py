@@ -1,16 +1,26 @@
 from tsp import TSP
 import numpy as np
+from utility import create_adj_matrix
+import argparse
+import matplotlib.pyplot as plt
+import networkx as nx
 
 if __name__ == "__main__":
-    distances = np.full((6,6), 10000)
-    distances[5][0] = 10
-    distances[1][5] = 12
-    distances[4][1] = 2
-    distances[2][4] = 4
-    distances[3][2] = 6
-    distances[0][3] = 8
 
-    print(distances)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file', type=str, 
+        help='Give name of the file contains vertex\'s of cities data')
+    args = parser.parse_args()
+    name = args.file
+    print(name)
 
-    problem = TSP(distances)
+    points, matrix = create_adj_matrix(filename=name)
+    problem = TSP(matrix)
     problem.get_results()
+
+    g = nx.from_numpy_matrix(matrix)
+    nx.draw(g, [(point.x,point.y) for point in points], node_size=100)
+    plt.axis('equal')
+    plt.show()
+
+
