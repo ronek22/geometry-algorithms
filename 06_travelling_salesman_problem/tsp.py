@@ -21,6 +21,8 @@ class TSP:
         print("~"*60)
         print("Optimal tour: ", *self.optimalTour, sep="->")
         print(f"Minimal cost of tour: {self.minTourCost}")
+        return list(zip(self.optimalTour[:-1], self.optimalTour[1:]))
+        # return [tuple(self.optimalTour[n:n+2]) for n in range(len(self.optimalTour)-1)]
 
     def solve(self):
         N = self.distances.shape[0]

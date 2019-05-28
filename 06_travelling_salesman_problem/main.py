@@ -16,10 +16,14 @@ if __name__ == "__main__":
 
     points, matrix = create_adj_matrix(filename=name)
     problem = TSP(matrix)
-    problem.get_results()
+    optimal_tour = problem.get_results()
+
 
     g = nx.from_numpy_matrix(matrix)
-    nx.draw(g, [(point.x,point.y) for point in points], node_size=100)
+    nx.draw_networkx(g, [(point.x,point.y) for point in points], nodelist=list(range(len(points))),node_size=200, node_color='g')
+    nx.draw_networkx_edges(g,[(point.x,point.y) for point in points],
+                       edgelist=optimal_tour,
+                       width=4,alpha=0.8,edge_color='r')
     plt.axis('equal')
     plt.show()
 

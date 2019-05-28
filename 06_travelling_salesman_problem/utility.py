@@ -31,5 +31,8 @@ def create_adj_matrix(filename='test1.txt', print=True):
     if print: matprint(matrix)
     return points, matrix
 
+def get_edges_from_optimal_tour(tour):
+    pass
+
 
 
